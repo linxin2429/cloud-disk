@@ -1,0 +1,30 @@
+syntax = "v1"
+
+type LoginRequest {
+	Name     string `json:"name"`
+	Password string `json:"password"`
+}
+
+type LoginResponse {
+	Token string `json:"token"`
+}
+
+type UserInfoRequest {
+	Identity string `json:"identity"`
+}
+
+type UserInfoResponse {
+	Name  string `json:"name"`
+	Email string `json:"email"`
+}
+
+@server(
+	prefix: /v1/user
+)
+service core-api {
+	@handler UserLoginHandler
+	post /login(LoginRequest) returns (LoginResponse)
+
+	@handler UserInfoHandler
+	get /info(UserInfoRequest) returns (UserInfoResponse)
+}
