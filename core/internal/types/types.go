@@ -18,3 +18,20 @@ type UserInfoResponse struct {
 	Name  string `json:"name"`
 	Email string `json:"email"`
 }
+
+type MailCaptchaRequest struct {
+	Email string `json:"email"`
+}
+
+type MailCaptchaResponse struct {
+}
+
+type UserRegisterRequest struct {
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+	Captcha  string `json:"captcha"`
+}
+
+type UserRegisterResponse struct {
+}

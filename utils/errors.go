@@ -8,6 +8,10 @@ import (
 var (
 	ErrUsernameOrPasswd = errors.New("username or passwd error")
 	ErrUserNotFound = errors.New("user not found")
+	ErrEmailRegistered = errors.New("the email already registered")
+	ErrCaptchaRepeated = errors.New("Send the captcha code repeatedly")
+	ErrCaptchaNotMatch = errors.New("the captcha not match")
+	ErrUserExist = errors.New("username already exist")
 )
 
 type ErrWrapper struct {

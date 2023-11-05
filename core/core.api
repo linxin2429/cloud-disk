@@ -18,13 +18,39 @@ type UserInfoResponse {
 	Email string `json:"email"`
 }
 
+type MailCaptchaRequest {
+	Email string `json:"email"`
+}
+
+type MailCaptchaResponse {}
+
+type UserRegisterRequest {
+	Name     string `json:"name"`
+	Password string `json:"password"`
+	Email    string `json:"email"`
+	Captcha  string `json:"captcha"`
+}
+
+type UserRegisterResponse {}
+
 @server(
 	prefix: /v1/user
 )
 service core-api {
+	// 用户登录
 	@handler UserLoginHandler
 	post /login(LoginRequest) returns (LoginResponse)
 
+	// 用户详情
 	@handler UserInfoHandler
 	get /info(UserInfoRequest) returns (UserInfoResponse)
+
+	// 验证码发送
+	@handler MailCaptchaHandler
+	post /mail/captcha/send(MailCaptchaRequest) returns (MailCaptchaResponse)
+
+	// 用户注册
+	@handler UserRegisterHandler
+	post /register(UserRegisterRequest) returns (UserRegisterResponse)
+
 }

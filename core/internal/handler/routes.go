@@ -22,6 +22,16 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/info",
 				Handler: UserInfoHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/mail/captcha/send",
+				Handler: MailCaptchaHandler(serverCtx),
+			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/register",
+				Handler: UserRegisterHandler(serverCtx),
+			},
 		},
 		rest.WithPrefix("/v1/user"),
 	)

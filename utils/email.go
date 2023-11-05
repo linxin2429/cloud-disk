@@ -25,12 +25,11 @@ func sendToMailHTML(user, password, host, port, subject, body string, to, cc, bc
 	e.Bcc = bcc
 	e.Subject = subject
 	e.HTML = []byte(body)
-	fmt.Println(user,password,fmt.Sprintf("%s:%s", host, port))
 	err := e.SendWithTLS(fmt.Sprintf("%s:%s", host, port), smtp.PlainAuth("", user, password, host), &tls.Config{
 		InsecureSkipVerify: true,
 		ServerName:         host,
 	})
-	return err
+	return NewErrWrapper(err,"sendToMailHTML")
 }
 
 type emailConfig struct {
@@ -40,7 +39,7 @@ type emailConfig struct {
 	Port     string `json:"port"`
 }
 
-func SendEmailFromConfig(configPath, subject, body, mailtype string, to, cc, bcc []string) error {
+func SendEmailFromConfig(configPath, subject, body string, to, cc, bcc []string) error {
 	yamlFile, err := os.ReadFile(configPath)
 	if err != nil {
 		return NewErrWrapper(err, "SendEmailFromConfig")
@@ -51,4 +50,21 @@ func SendEmailFromConfig(configPath, subject, body, mailtype string, to, cc, bcc
 		return NewErrWrapper(err, "SendEmailFromConfig")
 	}
 	return sendToMailHTML(config.User, config.Password, config.Host, config.Port, subject, body, to, cc, bcc)
+}
+
+func SendEmailCaptcha(email string, code string) error {
+	bodyPattern := `
+		<html>
+        <body>
+        <h3>
+        %s
+        </h3>
+        </body>
+        </html>
+	`
+	body := fmt.Sprintf(bodyPattern, code)
+	to := []string{email}
+	yamlPath := "/home/dengxinlin/golang/cloud_disk/core/etc/email.yaml"
+	subject := "[cloud disk captcha]"
+	return SendEmailFromConfig(yamlPath, subject, body, to, nil, nil)
 }
