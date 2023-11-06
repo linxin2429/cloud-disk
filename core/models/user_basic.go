@@ -7,11 +7,11 @@ import (
 )
 
 type UserBasic struct {
-	Id       int    `json:"id"`
-	Identity string `json:"identity"`
-	Name     string `json:"name"`
-	Password string `json:"password"`
-	Email    string `json:"email"`
+	Id       int       `json:"id"`
+	Identity string    `json:"identity"`
+	Name     string    `json:"name"`
+	Password string    `json:"password"`
+	Email    string    `json:"email"`
 	CreateAt time.Time `xorm:"created" json:"create_at"`
 	UpdateAt time.Time `xorm:"updated" json:"update_at"`
 	DeleteAt time.Time `xorm:"deleted" json:"delete_at"`

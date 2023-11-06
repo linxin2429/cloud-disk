@@ -35,4 +35,29 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		},
 		rest.WithPrefix("/v1/user"),
 	)
+
+	server.AddRoutes(
+		rest.WithMiddlewares(
+			[]rest.Middleware{serverCtx.Auth},
+			[]rest.Route{
+				{
+					Method:  http.MethodPost,
+					Path:    "/upload",
+					Handler: FileUploadHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodPost,
+					Path:    "/user/repository/save",
+					Handler: UserRepositorySaveHandler(serverCtx),
+				},
+				{
+					Method:  http.MethodGet,
+					Path:    "/user/file/list",
+					Handler: UserFileListHandler(serverCtx),
+				},
+			}...,
+		),
+		rest.WithPrefix("/v1/file"),
+		rest.WithMaxBytes(104857600),
+	)
 }

@@ -29,7 +29,7 @@ func sendToMailHTML(user, password, host, port, subject, body string, to, cc, bc
 		InsecureSkipVerify: true,
 		ServerName:         host,
 	})
-	return NewErrWrapper(err,"sendToMailHTML")
+	return NewErrWrapper(err, "sendToMailHTML")
 }
 
 type emailConfig struct {

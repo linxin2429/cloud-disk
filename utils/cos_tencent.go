@@ -5,14 +5,17 @@ import (
 	"net/http"
 	"net/url"
 	"os"
+	"path"
 
 	"github.com/tencentyun/cos-go-sdk-v5"
 )
 
-func Upload(filename , key string) error{
+const COS_URL = "https://cloud-disk-1305113026.cos.ap-hongkong.myqcloud.com"
+
+func Upload(r *http.Request) (string, error) {
 	// 存储桶名称，由 bucketname-appid 组成，appid 必须填入，可以在 COS 控制台查看存储桶名称。 https://console.cloud.tencent.com/cos5/bucket
 	// 替换为用户的 region，存储桶 region 可以在 COS 控制台“存储桶概览”查看 https://console.cloud.tencent.com/ ，关于地域的详情见 https://cloud.tencent.com/document/product/436/6224 。
-	u, _ := url.Parse("https://cloud-disk-1305113026.cos.ap-hongkong.myqcloud.com")
+	u, _ := url.Parse(COS_URL)
 	b := &cos.BaseURL{BucketURL: u}
 	client := cos.NewClient(b, &http.Client{
 		Transport: &cos.AuthorizationTransport{
@@ -24,11 +27,14 @@ func Upload(filename , key string) error{
 		},
 	})
 
-	_, _, err := client.Object.Upload(
-		context.Background(), key, filename, nil,
+	file, fileHeader, err := r.FormFile("file")
+	key := "cloud-disk/" + GenerateUUID() + path.Ext(fileHeader.Filename)
+
+	_, err = client.Object.Put(
+		context.Background(), key, file, nil,
 	)
 	if err != nil {
-		return NewErrWrapper(err,"Upload")
+		return "", NewErrWrapper(err, "Upload")
 	}
-	return nil
+	return COS_URL + "/" + key, nil
 }

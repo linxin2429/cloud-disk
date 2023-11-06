@@ -35,3 +35,49 @@ type UserRegisterRequest struct {
 
 type UserRegisterResponse struct {
 }
+
+type FileUploadRequest struct {
+	Hash string `json:"hash,optional"`
+	Name string `json:"name,optional"`
+	Ext  string `json:"ext,optional"`
+	Size int64  `json:"size,optional"`
+	Path string `json:"path,optional"`
+}
+
+type FileUploadResponse struct {
+	Identity string `json:"identity"`
+	Ext      string `json:"ext"`
+	Name     string `json:"name"`
+}
+
+type UserRepositorySaveRequest struct {
+	ParentId           int    `json:"parent_id"`
+	RepositoryIdentity string `json:"repository_identity"`
+	Ext                string `json:"ext"`
+	Name               string `json:"name"`
+}
+
+type UserRepositorySaveResponse struct {
+	Identity string `json:"identity"`
+}
+
+type UserFileListRequest struct {
+	Id   int `json:"id,optional"`
+	Page int `json:"page,optional"`
+	Size int `json:"size,optional"`
+}
+
+type UserFileListResponse struct {
+	List  []*UserFile `json:"list"`
+	Count int         `json:"count"`
+}
+
+type UserFile struct {
+	Id                 int    `json:"id"`
+	Identity           string `json:"identity"`
+	RepositoryIdentity string `json:"repository_identity"`
+	Ext                string `json:"ext"`
+	Name               string `json:"name"`
+	Path               string `json:"path"`
+	Size               int64  `json:"size"`
+}

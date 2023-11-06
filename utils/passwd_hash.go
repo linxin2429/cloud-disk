@@ -37,3 +37,17 @@ func GenerateToken(id int, identity string, name string) (string, error) {
 
 	return token, nil
 }
+
+func AnalyzeToken(token string) (*models.UserClaim, error) {
+	uc := new(models.UserClaim)
+	claims, err := jwt.ParseWithClaims(token, uc, func(t *jwt.Token) (interface{}, error) {
+		return []byte(models.JwtSecret), nil
+	})
+	if err != nil {
+		return nil, NewErrWrapper(err, "AnalyzeToken")
+	}
+	if !claims.Valid {
+		return uc, ErrInvalidToken
+	}
+	return uc, nil
+}

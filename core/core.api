@@ -52,5 +52,70 @@ service core-api {
 	// 用户注册
 	@handler UserRegisterHandler
 	post /register(UserRegisterRequest) returns (UserRegisterResponse)
+}
+
+type FileUploadRequest {
+	Hash string `json:"hash,optional"`
+	Name string `json:"name,optional"`
+	Ext  string `json:"ext,optional"`
+	Size int64  `json:"size,optional"`
+	Path string `json:"path,optional"`
+}
+
+type FileUploadResponse {
+	Identity string `json:"identity"`
+	Ext      string `json:"ext"`
+	Name     string `json:"name"`
+}
+
+type UserRepositorySaveRequest {
+	ParentId           int    `json:"parent_id"`
+	RepositoryIdentity string `json:"repository_identity"`
+	Ext                string `json:"ext"`
+	Name               string `json:"name"`
+}
+
+type UserRepositorySaveResponse {
+	Identity string `json:"identity"`
+}
+
+type UserFileListRequest {
+	Id   int `json:"id,optional"`
+	Page int `json:"page,optional"`
+	Size int `json:"size,optional"`
+}
+
+type UserFileListResponse {
+	List  []*UserFile `json:"list"`
+	Count int         `json:"count"`
+}
+
+type UserFile {
+	Id                 int    `json:"id"`
+	Identity           string `json:"identity"`
+	RepositoryIdentity string `json:"repository_identity"`
+	Ext                string `json:"ext"`
+	Name               string `json:"name"`
+	Path               string `json:"path"`
+	Size               int64  `json:"size"`
+}
+
+@server(
+	prefix: /v1/file
+	maxBytes: 104857600
+	middleware: Auth
+)
+service core-api {
+	// 文件上传
+	@handler FileUploadHandler
+	post /upload(FileUploadRequest) returns (FileUploadResponse)
+
+	// 用户文件的关联存储
+	@handler UserRepositorySaveHandler
+	post /user/repository/save(UserRepositorySaveRequest) returns (UserRepositorySaveResponse)
+
+	// 用户文件列表
+	@handler UserFileListHandler
+	get /user/file/list(UserFileListRequest) returns (UserFileListResponse)
 
 }
