@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"time"
 
 	"cloud_disk/core/internal/svc"
 	"cloud_disk/core/internal/types"
@@ -43,6 +44,7 @@ func (l *UserFileListLogic) UserFileList(req *types.UserFileListRequest, userIde
 		Select("user_repository.id,user_repository.identity,user_repository.repository_identity,user_repository.ext,user_repository.name,"+
 			"repository_pool.path,repository_pool.size").
 		Join("LEFT", "repository_pool", "user_repository.repository_identity = repository_pool.identity").
+		Where("user_repository.delete_at = ? OR user_repository.delete_at is NULL",time.Time{}.Format("2006-01-02 15:04:05")).
 		Limit(size, offset).
 		Find(&uf)
 	if err != nil {

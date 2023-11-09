@@ -100,6 +100,35 @@ type UserFile {
 	Size               int64  `json:"size"`
 }
 
+type UserFileRenameRequest {
+	Identity string `json:"identity"`
+	Name     string `json:"name"`
+}
+
+type UserFileRenameResponse {}
+
+type UserDirectoryCreateRequest {
+	ParentId int    `json:"parent_id"`
+	Name     string `json:"name"`
+}
+
+type UserDirectoryCreateResponse {
+	Identity string `json:"identity"`
+}
+
+type UserFileDeleteRequest {
+	Identity string `json:"identity"`
+}
+
+type UserFileDeleteResponse {}
+
+type UserFileMoveRequest {
+	Identity string `json:"identity"`
+	ParentId int    `json:"parent_id"`
+}
+
+type UserFileMoveResponse {}
+
 @server(
 	prefix: /v1/file
 	maxBytes: 104857600
@@ -118,4 +147,19 @@ service core-api {
 	@handler UserFileListHandler
 	get /user/file/list(UserFileListRequest) returns (UserFileListResponse)
 
+	// 用户文件名称修改
+	@handler UserFileRenameHandler
+	post /user/file/rename(UserFileRenameRequest) returns (UserFileRenameResponse)
+
+	// 用户文件夹创建
+	@handler UserDirectoryCreateHandler
+	post /user/directory/create(UserDirectoryCreateRequest) returns (UserDirectoryCreateResponse)
+
+	// 用户文件删除
+	@handler UserFileDeleteHandler
+	delete /user/file/delete(UserFileDeleteRequest) returns(UserFileDeleteResponse)
+
+	// 用户文件移动
+	@handler UserFileMoveHandler
+	put /user/file/move(UserFileMoveRequest) returns(UserFileMoveResponse)
 }

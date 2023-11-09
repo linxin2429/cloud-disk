@@ -81,3 +81,35 @@ type UserFile struct {
 	Path               string `json:"path"`
 	Size               int64  `json:"size"`
 }
+
+type UserFileRenameRequest struct {
+	Identity string `json:"identity"`
+	Name     string `json:"name"`
+}
+
+type UserFileRenameResponse struct {
+}
+
+type UserDirectoryCreateRequest struct {
+	ParentId int    `json:"parent_id"`
+	Name     string `json:"name"`
+}
+
+type UserDirectoryCreateResponse struct {
+	Identity string `json:"identity"`
+}
+
+type UserFileDeleteRequest struct {
+	Identity string `json:"identity"`
+}
+
+type UserFileDeleteResponse struct {
+}
+
+type UserFileMoveRequest struct {
+	Identity string `json:"identity"`
+	ParentId int    `json:"parent_id"`
+}
+
+type UserFileMoveResponse struct {
+}

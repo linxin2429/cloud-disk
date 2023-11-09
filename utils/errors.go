@@ -13,6 +13,9 @@ var (
 	ErrCaptchaNotMatch  = errors.New("the captcha not match")
 	ErrUserExist        = errors.New("username already exist")
 	ErrInvalidToken     = errors.New("invalid token")
+	ErrFileNameExist    = errors.New("file name exist")
+	ErrFileNotFound     = errors.New("file not found")
+	ErrDirNotFound      = errors.New("dir not found")
 )
 
 type ErrWrapper struct {
